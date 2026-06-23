@@ -1,22 +1,44 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { FilmScheduleEntity } from './entity/film-schedule.entity';
 
 @Schema()
-export class Film {
-  @Prop()
-  _id: string;
-
+export class Schedule {
   @Prop({ unique: true })
   id: string;
 
-  @Prop({ required: true, minValue: 0, maxValue: 10 })
+  @Prop({ required: true })
+  daytime: string;
+
+  @Prop({ required: true })
+  hall: number;
+
+  @Prop({ required: true })
+  rows: number;
+
+  @Prop({ required: true })
+  seats: number;
+
+  @Prop({ required: true })
+  price: number;
+
+  @Prop({ type: [String], default: [] })
+  taken: string[];
+}
+
+export const ScheduleSchema = SchemaFactory.createForClass(Schedule);
+
+@Schema()
+export class Film {
+  @Prop({ unique: true })
+  id: string;
+
+  @Prop({ required: true, min: 0, max: 10 })
   rating: number;
 
   @Prop({ required: true })
   director: string;
 
-  @Prop()
+  @Prop({ type: [String], default: [] })
   tags: string[];
 
   @Prop()
@@ -34,8 +56,8 @@ export class Film {
   @Prop()
   description: string;
 
-  @Prop()
-  schedule: FilmScheduleEntity[];
+  @Prop({ type: [ScheduleSchema] })
+  schedule: Schedule[];
 }
 
 export type FilmDocument = HydratedDocument<Film>;

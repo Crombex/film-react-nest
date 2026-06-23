@@ -14,16 +14,27 @@ export class FilmsRepository {
 
   async findFilmScheduleByID(id: FilmEntity['id']) {
     const film = await this.filmModel.findOne({ id }).exec();
+    if (!film) {
+      return [];
+    }
     return film.schedule;
   }
 
-  updateFilmTakenPlaces(id: FilmEntity['id'], session: string, place: string) {
-    return this.filmModel
-      .findOneAndUpdate(
+  async updateFilmTakenPlaces(
+    id: FilmEntity['id'],
+    session: string,
+    place: string,
+  ) {
+    const film = await this.filmModel
+      .updateOne(
         { id, 'schedule.id': session },
-        { $push: { 'schedule.$.taken': place } },
+        { $addToSet: { 'schedule.$.taken': place } },
         { new: true },
       )
       .exec();
+    if (film.modifiedCount === 0) {
+      return null;
+    }
+    return await this.filmModel.findOne({ id }).exec();
   }
 }

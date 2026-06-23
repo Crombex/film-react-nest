@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { FilmsRepository } from './films.repository';
 import { FilmEntity } from './entity/film.entity';
 import { UpdateTakenPlacesException } from './exceptions/update-taken-places.exception';
+import { FilmNotFound } from './exceptions/film-not-found.exception';
 
 @Injectable()
 export class FilmsService {
@@ -17,10 +18,10 @@ export class FilmsService {
 
   async findFilmScheduleByID(id: FilmEntity['id']) {
     const schedule = await this.filmsRepository.findFilmScheduleByID(id);
-    return {
-      total: schedule.length,
-      items: schedule,
-    };
+    if (schedule.length === 0) {
+      throw new FilmNotFound('Film not found');
+    }
+    return schedule;
   }
 
   async updateFilmTakenPlaces(

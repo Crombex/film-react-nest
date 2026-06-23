@@ -8,8 +8,6 @@ import {
 import { FilmScheduleEntity } from '../entity/film-schedule.entity';
 
 export class FilmsResponseDTO {
-  @IsString()
-  _id: string;
 
   @IsUUID(4)
   id: string;

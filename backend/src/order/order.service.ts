@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { FilmsService } from '../films/films.service';
 import { OrderEntity } from './entity/order.entity';
 import { DaytimeNotMatchException } from './exceptions/daytime-not-match.exception';
-import { PlaceAlreadyTakenException } from './exceptions/place-already-taken.exception';
 import { SessionNotFoundException } from './exceptions/session-not-found.exception';
 
 @Injectable()
@@ -16,18 +15,16 @@ export class OrderService {
    * а также обновить информацию о занятых местах для каждого фильма и сеанса
    */
   async createOrder(order: OrderEntity) {
-    const response = {
-      total: 0,
-      items: [],
-    };
+    const result = [];
 
     const allTickets = order.tickets;
 
     for (const ticket of allTickets) {
-      const { items: filmSchedule } =
-        await this.filmsService.findFilmScheduleByID(ticket.film);
+      const schedule = await this.filmsService.findFilmScheduleByID(
+        ticket.film,
+      );
 
-      const session = filmSchedule.find((item) => item.id === ticket.session);
+      const session = schedule.find((item) => item.id === ticket.session);
 
       if (!session) {
         throw new SessionNotFoundException('Session not found');
@@ -41,31 +38,23 @@ export class OrderService {
 
       const personPlace = `${ticket.row}:${ticket.seat}`;
 
-      if (session.taken.includes(personPlace)) {
-        throw new PlaceAlreadyTakenException(
-          'Place is already taken for session',
-        );
-      }
-
-      const data = await this.filmsService.updateFilmTakenPlaces(
+      const filmSessionData = await this.filmsService.updateFilmTakenPlaces(
         ticket.film,
         ticket.session,
         personPlace,
       );
 
-      response.items.push({
+      result.push({
         film: ticket.film,
-        session: data.id,
-        daytime: data.daytime,
+        session: filmSessionData.id,
+        daytime: filmSessionData.daytime,
         row: ticket.row,
         seat: ticket.seat,
-        price: data.price,
+        price: filmSessionData.price,
         id: crypto.randomUUID(),
       });
-
-      response.total++;
     }
 
-    return response;
+    return result;
   }
 }
