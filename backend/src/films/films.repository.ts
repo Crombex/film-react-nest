@@ -28,8 +28,7 @@ export class FilmsRepository {
     const film = await this.filmModel
       .updateOne(
         { id, 'schedule.id': session },
-        { $addToSet: { 'schedule.$.taken': place } },
-        { new: true },
+        { $addToSet: { 'schedule.$.taken': place } }
       )
       .exec();
     if (film.modifiedCount === 0) {
