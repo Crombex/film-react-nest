@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FilmsService } from '../films/films.service';
-import { OrderEntity } from './entity/order.entity';
+import { OrderModel } from './model/order.model';
 import { DaytimeNotMatchException } from './exceptions/daytime-not-match.exception';
 import { SessionNotFoundException } from './exceptions/session-not-found.exception';
 
@@ -14,7 +14,7 @@ export class OrderService {
    * и нужно проверить каждый билет на валидность,
    * а также обновить информацию о занятых местах для каждого фильма и сеанса
    */
-  async createOrder(order: OrderEntity) {
+  async createOrder(order: OrderModel) {
     const result = [];
 
     const allTickets = order.tickets;

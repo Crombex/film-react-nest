@@ -1,6 +1,9 @@
-import { DynamicModule, Module, Global } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Module, Global, DynamicModule } from '@nestjs/common';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { FilmEntity } from '../films/entity/film.entity';
+import { ScheduleEntity } from '../films/entity/schedule.entity';
+import { DataSourceOptions } from 'typeorm';
 
 @Global()
 @Module({})
@@ -9,14 +12,22 @@ export class DatabaseModule {
     return {
       module: DatabaseModule,
       imports: [
-        MongooseModule.forRootAsync({
+        TypeOrmModule.forRootAsync({
           inject: [ConfigService],
-          useFactory: (config: ConfigService) => ({
-            uri: config.getOrThrow<string>('DATABASE_URL'),
-          }),
+          useFactory: (config: ConfigService) =>
+            ({
+              type: config.get<DataSourceOptions['type']>('DATABASE_DRIVER'),
+              host: config.get<string>('DATABASE_HOST'),
+              port: config.get<number>('DATABASE_PORT'),
+              username: config.get<string>('DATABASE_USERNAME'),
+              password: config.get<string>('DATABASE_PASSWORD'),
+              database: config.get<string>('DATABASE_NAME'),
+              migrations: [],
+              entities: [FilmEntity, ScheduleEntity],
+              synchronize: false,
+            }) as TypeOrmModuleOptions,
         }),
       ],
-      exports: [MongooseModule],
     };
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FilmsRepository } from './films.repository';
-import { FilmEntity } from './entity/film.entity';
-import { UpdateTakenPlacesException } from './exceptions/update-taken-places.exception';
+import { FilmModel } from './model/film.model';
+
 import { FilmNotFound } from './exceptions/film-not-found.exception';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class FilmsService {
     };
   }
 
-  async findFilmScheduleByID(id: FilmEntity['id']) {
+  async findFilmScheduleByID(id: FilmModel['id']) {
     const schedule = await this.filmsRepository.findFilmScheduleByID(id);
     if (schedule.length === 0) {
       throw new FilmNotFound('Film not found');
@@ -25,7 +25,7 @@ export class FilmsService {
   }
 
   async updateFilmTakenPlaces(
-    id: FilmEntity['id'],
+    id: FilmModel['id'],
     session: string,
     place: string,
   ) {
@@ -34,9 +34,6 @@ export class FilmsService {
       session,
       place,
     );
-    if (!updatedFilm) {
-      throw new UpdateTakenPlacesException('Failed to update taken places');
-    }
     return updatedFilm.schedule.find((item) => item.id === session);
   }
 }
