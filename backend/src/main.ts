@@ -6,7 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { collectErrors } from './utils/errors';
 import { ValidationPipeErrorException } from './exceptions/validation-pipe-error.exception';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -19,7 +18,7 @@ async function bootstrap() {
       exceptionFactory: (errors) => {
         const formattedErrors = collectErrors(errors);
         throw new ValidationPipeErrorException(formattedErrors);
-      }
+      },
     }),
   );
   app.setGlobalPrefix('api/afisha');

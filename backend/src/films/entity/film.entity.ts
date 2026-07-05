@@ -1,15 +1,37 @@
-import { FilmScheduleEntity } from './film-schedule.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ScheduleEntity } from './schedule.entity';
 
-export interface FilmEntity {
-  _id: string;
+@Entity('films')
+export class FilmEntity {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
   rating: number;
+
+  @Column()
   director: string;
-  tags: string[];
+
+  @Column()
+  tags: string;
+
+  @Column()
   image: string;
+
+  @Column()
   cover: string;
+
+  @Column()
   title: string;
+
+  @Column()
   about: string;
+
+  @Column()
   description: string;
-  schedule: FilmScheduleEntity[];
+
+  @OneToMany(() => ScheduleEntity, (schedule) => schedule.film, {
+    cascade: true,
+  })
+  schedule: ScheduleEntity[];
 }
