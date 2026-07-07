@@ -1,4 +1,4 @@
-export interface TicketEntity {
+export interface TicketModel {
   film: string;
   session: string;
   daytime: string;

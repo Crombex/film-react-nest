@@ -36,8 +36,8 @@ export class CreateOrderDTO {
   @IsString({ message: 'phone must be a string' })
   phone: string;
 
-  @IsArray({message: 'tickets must be an array'})
-  @ArrayNotEmpty({message: 'tickets array must not be empty'})
+  @IsArray({ message: 'tickets must be an array' })
+  @ArrayNotEmpty({ message: 'tickets array must not be empty' })
   @ValidateNested({ each: true })
   @Type(() => TicketDTO)
   tickets: TicketDTO[];

@@ -5,10 +5,9 @@ import {
   IsNotEmpty,
   IsArray,
 } from 'class-validator';
-import { FilmScheduleEntity } from '../entity/film-schedule.entity';
+import { FilmScheduleModel } from '../model/film-schedule.model';
 
 export class FilmsResponseDTO {
-
   @IsUUID(4)
   id: string;
 
@@ -39,5 +38,5 @@ export class FilmsResponseDTO {
   description: string;
 
   @IsArray()
-  schedule: FilmScheduleEntity[];
+  schedule: FilmScheduleModel[];
 }
