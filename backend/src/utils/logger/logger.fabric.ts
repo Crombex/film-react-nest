@@ -1,20 +1,19 @@
-import { Inject, LoggerService } from "@nestjs/common";
-import { TSKVLogger } from "./tskv-logger.service";
-import { DevLogger } from "./dev-logger.service";
-import { JsonLogger } from "./json-logger.service";
-import { ConfigService } from "@nestjs/config";
-
+import { LoggerService } from '@nestjs/common';
+import { TSKVLogger } from './tskv-logger.service';
+import { DevLogger } from './dev-logger.service';
+import { JsonLogger } from './json-logger.service';
+import { ConfigService } from '@nestjs/config';
 
 export function createLogger(configService: ConfigService): LoggerService {
-  const loggerType = configService.get<string>('LOGGER')
+  const loggerType = configService.get<string>('LOGGER');
   switch (loggerType) {
     case 'DEV':
-      return new DevLogger()
+      return new DevLogger();
     case 'JSON':
-      return new JsonLogger()
+      return new JsonLogger();
     case 'TSKV':
-      return new TSKVLogger()
+      return new TSKVLogger();
     default:
-      return new DevLogger()
+      return new DevLogger();
   }
 }

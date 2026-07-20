@@ -9,7 +9,7 @@ import { createLogger } from './utils/logger/logger.fabric';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    bufferLogs: true
+    bufferLogs: true,
   });
 
   const configService = app.get(ConfigService);
@@ -27,7 +27,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/afisha');
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.enableCors();
-  app.useLogger(createLogger(configService))
+  app.useLogger(createLogger(configService));
   await app.listen(port);
 }
 bootstrap();
