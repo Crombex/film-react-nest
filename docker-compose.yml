@@ -18,6 +18,9 @@ services:
     networks:
       - webnet
     restart: on-failure
+    args:
+      VITE_API_URL: ${VITE_API_URL}
+      VITE_CDN_URL: ${VITE_CDN_URL}
     depends_on:
       - backend
     volumes:
