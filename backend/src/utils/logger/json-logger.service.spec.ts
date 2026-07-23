@@ -20,11 +20,11 @@ describe('JSONLogger', () => {
     expect(jsonLogger.formatMessage).toHaveBeenCalledWith(
       'log',
       log.message,
-      log.optionalParams,
+      ...log.optionalParams,
     );
 
     expect(console.log).toHaveBeenCalledWith(
-      jsonLogger.formatMessage('log', log.message, log.optionalParams),
+      jsonLogger.formatMessage('log', log.message, ...log.optionalParams),
     );
   });
 
@@ -36,11 +36,11 @@ describe('JSONLogger', () => {
     expect(jsonLogger.formatMessage).toHaveBeenCalledWith(
       'error',
       log.message,
-      log.optionalParams,
+      ...log.optionalParams,
     );
 
     expect(console.error).toHaveBeenCalledWith(
-      jsonLogger.formatMessage('error', log.message, log.optionalParams),
+      jsonLogger.formatMessage('error', log.message, ...log.optionalParams),
     );
   });
 
@@ -52,11 +52,11 @@ describe('JSONLogger', () => {
     expect(jsonLogger.formatMessage).toHaveBeenCalledWith(
       'warn',
       log.message,
-      log.optionalParams,
+      ...log.optionalParams,
     );
 
     expect(console.warn).toHaveBeenCalledWith(
-      jsonLogger.formatMessage('warn', log.message, log.optionalParams),
+      jsonLogger.formatMessage('warn', log.message, ...log.optionalParams),
     );
   });
 });
