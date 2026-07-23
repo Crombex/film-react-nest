@@ -34,6 +34,6 @@ export class FilmsService {
       session,
       place,
     );
-    return updatedFilm.schedule.find((item) => item.id === session);
+    return updatedFilm!.schedule.find((item) => item.id === session);
   }
 }

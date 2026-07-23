@@ -28,11 +28,11 @@ jobs:
           cache-dependency-path: backend/package-lock.json
       - name: Install dependencies
         run: npm ci
-      - name: Run lint
-        run: npm run lint
+      - name: Run lint check
+        run: npm run lint:check
       - name: Run tests
         run: npm test
-      - name: format code
+      - name: format code check
         run: npm run format:check
       - name: Build backend
         run: npm run build
@@ -56,7 +56,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      - name: Run lint
+      - name: Run lint check
         run: npm run lint
       - name: Build frontend
         run: npm run build
