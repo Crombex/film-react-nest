@@ -46,11 +46,11 @@ export class OrderService {
 
       result.push({
         film: ticket.film,
-        session: filmSessionData.id,
-        daytime: filmSessionData.daytime,
+        session: filmSessionData!.id,
+        daytime: filmSessionData!.daytime,
         row: ticket.row,
         seat: ticket.seat,
-        price: filmSessionData.price,
+        price: filmSessionData!.price,
         id: crypto.randomUUID(),
       });
     }

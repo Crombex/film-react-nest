@@ -1,18 +1,36 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { OrderController } from './order.controller';
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import { OrderService } from './order.service';
 
 describe('OrderController', () => {
-  let controller: OrderController;
+  let orderController: OrderController;
+  let orderService: OrderService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef = await Test.createTestingModule({
       controllers: [OrderController],
-    }).compile();
+      providers: [OrderService],
+    })
+      .overrideProvider(OrderService)
+      .useValue({
+        createOrder: jest.fn(),
+      })
+      .compile();
 
-    controller = module.get<OrderController>(OrderController);
+    orderController = moduleRef.get<OrderController>(OrderController);
+    orderService = moduleRef.get<OrderService>(OrderService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('.createOrder() should call createOrder of the service', () => {
+    const fakeOrder = {
+      email: '213',
+      phone: '1232',
+      tickets: [],
+    };
+
+    jest.spyOn(orderService, 'createOrder').mockResolvedValue([]);
+    orderController.createOrder(fakeOrder);
+    expect(orderService.createOrder).toHaveBeenCalledWith(fakeOrder);
   });
 });

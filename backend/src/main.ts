@@ -5,9 +5,12 @@ import { GlobalExceptionFilter } from './app-exception.filter';
 import { ConfigService } from '@nestjs/config';
 import { collectErrors } from './utils/errors';
 import { ValidationPipeErrorException } from './exceptions/validation-pipe-error.exception';
+import { createLogger } from './utils/logger/logger.fabric';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
 
   const configService = app.get(ConfigService);
   const port = configService.get('PORT') || 3000;
@@ -24,6 +27,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/afisha');
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.enableCors();
+  app.useLogger(createLogger(configService));
   await app.listen(port);
 }
 bootstrap();

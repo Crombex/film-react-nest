@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      - internal
+      - webnet
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile.dev
+    ports:
+      - 80:80
+    networks:
+      - webnet
+    depends_on:
+      - backend
+  postgres:
+    image: postgres:16
+    networks:
+      - internal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/test:/docker-entrypoint-initdb.d:ro
+    env_file:
+      - ./.env
+
+volumes:
+  postgres_data:
+
+networks:
+  webnet:
+  internal:
